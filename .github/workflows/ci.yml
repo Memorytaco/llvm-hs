@@ -206,17 +206,17 @@ jobs:
         if: matrix.sys.os == 'ubuntu-latest'
         run: |
           curl https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-          sudo add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-15 main"
+          sudo add-apt-repository "deb http://apt.llvm.org/jammy/ llvm-toolchain-jammy-17 main"
           sudo apt-get update
-          sudo apt-get -y install llvm-15-dev
+          sudo apt-get -y install llvm-17-dev
 
       - name: Set up environment (macOS)
         if: matrix.sys.os == 'macOS-latest'
         run: |
-          brew install llvm@15
+          brew install llvm@17
           mkdir -p $HOME/.local/bin
-          ln -s $(brew --prefix llvm@15)/bin/llvm-config $HOME/.local/bin/llvm-config-15
-          ln -s $(brew --prefix llvm@15)/bin/llvm-config $HOME/.local/bin/
+          ln -s $(brew --prefix llvm@17)/bin/llvm-config $HOME/.local/bin/llvm-config-17
+          ln -s $(brew --prefix llvm@17)/bin/llvm-config $HOME/.local/bin/
           echo "$HOME/.local/bin" >> $GITHUB_PATH
 
       - name: Set up environment (windows)
@@ -224,8 +224,8 @@ jobs:
         run: |
           # https://stackoverflow.com/questions/33969803/how-to-obtain-older-versions-of-packages-using-msys2
           # https://packages.msys2.org/package/mingw-w64-clang-x86_64-llvm
-          curl -LO https://mirror.msys2.org/mingw/clang64/mingw-w64-clang-x86_64-llvm-15.0.7-3-any.pkg.tar.zst
-          pacman -U --noconfirm mingw-w64-clang-x86_64-llvm-15.0.7-3-any.pkg.tar.zst
+          curl -LO https://mirror.msys2.org/mingw/clang64/mingw-w64-clang-x86_64-llvm-17.0.6-6-any.pkg.tar.zst
+          pacman -U --noconfirm mingw-w64-clang-x86_64-llvm-17.0.6-6-any.pkg.tar.zst
 
       - name: Setup
         run: stack setup
