@@ -23,6 +23,7 @@ foreign import ccall unsafe "LLVMContextCreate" contextCreate ::
 foreign import ccall unsafe "LLVMGetGlobalContext" getGlobalContext ::
     IO (Ptr Context)
 
+{-# DEPRECATED contextSetOpaquePointers "Opaque pointers are always enabled" #-}
 foreign import ccall unsafe "LLVM_Hs_SetOpaquePointers" contextSetOpaquePointers ::
     Ptr Context -> IO ()
 

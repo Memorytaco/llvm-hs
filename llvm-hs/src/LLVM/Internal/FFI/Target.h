@@ -25,12 +25,14 @@
   macro(Assembly)                                       \
   macro(Object)
 
-#define LLVM_HS_FOR_EACH_TARGET_OPTION_FLAG(macro)  \
+#define LLVM_HS_FOR_EACH_TARGET_OPTION_FLAG(macro)      \
   macro(UnsafeFPMath)                                   \
   macro(NoInfsFPMath)                                   \
   macro(NoNaNsFPMath)                                   \
   macro(NoTrappingFPMath)                               \
   macro(NoSignedZerosFPMath)                            \
+  macro(ApproxFuncFPMath)                               \
+  macro(EnableAIXExtendedAltivecABI)                    \
   macro(HonorSignDependentRoundingFPMathOption)         \
   macro(NoZerosInBSS)                                   \
   macro(GuaranteedTailCallOpt)                          \
@@ -43,12 +45,13 @@
   macro(FunctionSections)                               \
   macro(DataSections)                                   \
   macro(IgnoreXCOFFVisibility)                          \
+  macro(XCOFFTracebackTable)                            \
   macro(UniqueSectionNames)                             \
   macro(UniqueBasicBlockSectionNames)                   \
   macro(TrapUnreachable)                                \
   macro(NoTrapAfterNoreturn)                            \
+  macro(TLSSize)                                        \
   macro(EmulatedTLS)                                    \
-  macro(ExplicitEmulatedTLS)                            \
   macro(EnableIPRA)                                     \
   macro(EmitStackSizeSection)                           \
   macro(EnableMachineOutliner)                          \
@@ -60,7 +63,15 @@
   macro(EnableDebugEntryValues)                         \
   macro(ValueTrackingVariableLocations)                 \
   macro(ForceDwarfFrameSection)                         \
-  macro(XRayOmitFunctionIndex)                          \
+  macro(XRayFunctionIndex)                              \
+  macro(DebugStrictDwarf)                               \
+  macro(Hotpatch)                                       \
+  macro(PPCGenScalarMASSEntries)                        \
+  macro(JMCInstrument)                                  \
+  macro(EnableCFIFixup)                                 \
+  macro(MisExpect)                                      \
+  macro(XCOFFReadOnlyPointers)                          \
+  macro(LoopAlignment)                                  \
 
 typedef enum {
 #define ENUM_CASE(n) LLVM_Hs_TargetOptionFlag_ ## n,
@@ -89,7 +100,8 @@ typedef enum {
 
 #define LLVM_HS_FOR_EACH_DEBUG_COMPRESSION_TYPE(macro) \
     macro(None) \
-    macro(Z)
+    macro(Zlib) \
+    macro(Zstd)
 
 typedef enum {
 #define ENUM_CASE(n) LLVM_Hs_DebugCompressionType_ ## n,

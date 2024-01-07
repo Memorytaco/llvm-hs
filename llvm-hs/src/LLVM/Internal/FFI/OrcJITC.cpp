@@ -169,11 +169,13 @@ void LLVM_Hs_JITDylib_replaceLinkOrder(JITDylib* dylib, JITDylib* oldlib, JITDyl
     dylib->replaceInLinkOrder(*oldlib, *newlib);
 }
 
-void LLVM_Hs_JITDylib_defineAbsoluteSymbols(
-    JITDylib* dylib, unsigned num_symbols, const SymbolStringPtr** names, const JITEvaluatedSymbol** symbols) {
+// please ref to https://github.com/llvm/llvm-project/commit/8b1771bd9f304be39d4dcbdcccedb6d3bcd18200#diff-77984a824d9182e5c67a481740f3bc5da78d5bd4cf6e1716a083ddb30a4a4931
+// for ExecutorAddr and JITTargetAddress
+void LLVM_Hs_JITDylib_defineAbsoluteSymbols(JITDylib* dylib, unsigned num_symbols, const SymbolStringPtr** names, const JITEvaluatedSymbol** symbols) {
   orc::SymbolMap map;
   for (unsigned i = 0; i < num_symbols; ++i) {
-    map[*names[i]] = *symbols[i];
+    auto symbol = *symbols[i];
+    map[*names[i]] = ExecutorSymbolDef {ExecutorAddr{symbol.getAddress()}, symbol.getFlags()};
   }
   if (Error err = dylib->define(orc::absoluteSymbols(std::move(map)))) {
     llvm::errs() << err << "\n";
@@ -210,21 +212,21 @@ JITDylib* LLVM_Hs_ExecutionSession_createJITDylib(ExecutionSession* es, const ch
 }
 
 
-Expected<JITEvaluatedSymbol>* LLVM_Hs_ExecutionSession_lookupSymbol(
+Expected<ExecutorSymbolDef>* LLVM_Hs_ExecutionSession_lookupSymbol(
     ExecutionSession* es, JITDylib* dylib,
     MangleAndInterner* mangler, const char* name) {
     // Printing here will show unresolved symbols.
     // es->dump(llvm::errs());
-    return new Expected<JITEvaluatedSymbol>(es->lookup({dylib}, (*mangler)(name)));
+    return new Expected<ExecutorSymbolDef>(es->lookup({dylib}, (*mangler)(name)));
 }
 
 uint64_t LLVM_Hs_getExpectedJITEvaluatedSymbolAddress(
-  Expected<JITEvaluatedSymbol>* symbolPtr,
+  Expected<ExecutorSymbolDef>* symbolPtr,
   char** errMsg) {
     auto& symbol = *symbolPtr;
     *errMsg = nullptr;
     if (symbol) {
-        return symbol->getAddress();
+        return symbol->getAddress().getValue();
     } else {
         *errMsg = strdup(toString(symbol.takeError()).c_str());
         return 0;
@@ -232,7 +234,7 @@ uint64_t LLVM_Hs_getExpectedJITEvaluatedSymbolAddress(
 }
 
 LLVMJITSymbolFlags_ LLVM_Hs_getExpectedJITEvaluatedSymbolFlags(
-  Expected<JITEvaluatedSymbol>* symbolPtr) {
+  Expected<ExecutorSymbolDef>* symbolPtr) {
     auto& symbol = *symbolPtr;
     if (!symbol) {
         return LLVMJITSymbolFlagHasError;

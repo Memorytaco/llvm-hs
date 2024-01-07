@@ -44,8 +44,8 @@ instance Monad m => EncodeM m A.CC.CallingConvention FFI.CallingConvention where
           A.CC.X86_64_SysV -> FFI.callingConventionX86_64_SysV
           A.CC.Win64 -> FFI.callingConventionWin64
           A.CC.X86_VectorCall -> FFI.callingConventionX86_VectorCall
-          A.CC.HHVM -> FFI.callingConventionHHVM
-          A.CC.HHVM_C -> FFI.callingConventionHHVM_C
+          A.CC.HHVM -> FFI.callingConventionDUMMY_HHVM
+          A.CC.HHVM_C -> FFI.callingConventionDUMMY_HHVM_C
           A.CC.X86_Intr -> FFI.callingConventionX86_INTR
           A.CC.AVR_Intr -> FFI.callingConventionAVR_INTR
           A.CC.AVR_Signal -> FFI.callingConventionAVR_SIGNAL
@@ -88,8 +88,8 @@ instance Monad m => DecodeM m A.CC.CallingConvention FFI.CallingConvention where
     [callingConventionP|X86_64_SysV|] -> A.CC.X86_64_SysV
     [callingConventionP|Win64|] -> A.CC.Win64
     [callingConventionP|X86_VectorCall|] -> A.CC.X86_VectorCall
-    [callingConventionP|HHVM|] -> A.CC.HHVM
-    [callingConventionP|HHVM_C|] -> A.CC.HHVM_C
+    [callingConventionP|DUMMY_HHVM|] -> A.CC.HHVM
+    [callingConventionP|DUMMY_HHVM_C|] -> A.CC.HHVM_C
     [callingConventionP|X86_INTR|] -> A.CC.X86_Intr
     [callingConventionP|AVR_INTR|] -> A.CC.AVR_Intr
     [callingConventionP|AVR_SIGNAL|] -> A.CC.AVR_Signal

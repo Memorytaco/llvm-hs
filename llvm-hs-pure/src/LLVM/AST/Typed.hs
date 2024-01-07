@@ -103,7 +103,8 @@ instance Typed C.Constant where
       (Left _) -> return t
       (Right (VectorType n _)) -> return $ Right $ VectorType n i1
       (Right _) -> return $ Right i1
-  typeOf (C.Select {..})  = typeOf trueValue
+  -- "select" instruction is removed
+  -- typeOf (C.Select {..})  = typeOf trueValue
   typeOf (C.ExtractElement {..})  = do
     t <- typeOf vector
     case t of

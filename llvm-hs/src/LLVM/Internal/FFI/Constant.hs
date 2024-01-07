@@ -104,7 +104,7 @@ $(do
                  ID.Binary | hasFlags fieldTypes -> return "LLVM_Hs_"
                  _ -> []
      return $
-       foreignDecl (prefix ++ "Const" ++ name) ("constant" ++ name) (map typeMapping fieldTypes) [t| Ptr Constant |]
+       foreignDecl (prefix <> "Const" <> name) ("constant" <> name) (map typeMapping fieldTypes) [t| Ptr Constant |]
   )
 
 foreign import ccall unsafe "LLVMConstGEP2" constantGetElementPtr' ::

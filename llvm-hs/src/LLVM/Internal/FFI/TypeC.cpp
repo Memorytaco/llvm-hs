@@ -24,12 +24,8 @@ LLVMTypeRef LLVM_Hs_ArrayType(LLVMTypeRef ElementType, uint64_t ElementCount) {
     return wrap(ArrayType::get(unwrap(ElementType), ElementCount));
 }
 
-LLVMTypeRef LLVM_Hs_OpaquePointerType(LLVMContextRef C, unsigned AddrSpace) {
+LLVMTypeRef LLVM_Hs_PointerType(LLVMContextRef C, unsigned AddrSpace) {
     return wrap(PointerType::get(*unwrap(C), AddrSpace));
-}
-
-LLVMBool LLVM_Hs_IsOpaquePointerType(LLVMTypeRef type) {
-    return unwrap(type)->isOpaquePointerTy();
 }
 
 uint64_t LLVM_Hs_GetArrayLength(LLVMTypeRef ArrayTy) {

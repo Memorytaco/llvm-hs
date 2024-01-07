@@ -27,7 +27,7 @@ import qualified LLVM.AST.Instruction as A
 import qualified LLVM.AST.Constant as A.C
 
 $(do
-   let ctorRecs t = do
+  let ctorRecs t = do
 #if __GLASGOW_HASKELL__ < 800
          TH.TyConI (TH.DataD _ _ _ cons _) <- TH.reify t
 #else
@@ -35,8 +35,7 @@ $(do
 #endif
          TH.dataToExpQ (const Nothing) $ [ (TH.nameBase n, rec) | rec@(TH.RecC n _) <- cons ]
 
-   [d|
-      astInstructionRecs :: Map String TH.Con
+  [d| astInstructionRecs :: Map String TH.Con
       astInstructionRecs = Map.fromList $(ctorRecs ''A.Instruction)
       astConstantRecs :: Map String TH.Con
       astConstantRecs = Map.fromList $(ctorRecs ''A.C.Constant)
@@ -44,7 +43,7 @@ $(do
  )
 
 instructionDefs :: Map String ID.InstructionDef
-instructionDefs = Map.fromList [ ((refName . ID.cAPIName $ i), i) | i <- ID.instructionDefs ]
+instructionDefs = Map.fromList [ (refName $ ID.cAPIName i, i) | i <- ID.instructionDefs ]
   where
     refName "AtomicCmpXchg" = "CmpXchg"
     refName "PHI" = "Phi"

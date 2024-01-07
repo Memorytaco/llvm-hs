@@ -7,7 +7,7 @@ using namespace llvm;
 extern "C" {
 
 void LLVM_Hs_SetOpaquePointers(LLVMContextRef context) {
-  unwrap(context)->setOpaquePointers(true);
+  // Opaque pointers are always enabled 
 }
 
 }

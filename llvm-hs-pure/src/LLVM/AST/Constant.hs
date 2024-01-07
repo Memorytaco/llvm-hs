@@ -176,11 +176,11 @@ data Constant
         operand0 :: Constant,
         operand1 :: Constant
       }
-    | Select {
-        condition' :: Constant,
-        trueValue :: Constant,
-        falseValue :: Constant
-      }
+    -- | Select {
+    --     condition' :: Constant,
+    --     trueValue :: Constant,
+    --     falseValue :: Constant
+    --   }
     | ExtractElement {
         vector :: Constant,
         index :: Constant

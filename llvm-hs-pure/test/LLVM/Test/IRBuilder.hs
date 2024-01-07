@@ -137,12 +137,9 @@ tests =
                         (UnName 4)
                         [ "arg_2" := fadd (LocalReference AST.double "arg_0") f10
                         , UnName 5 := fadd (LocalReference AST.double "arg_2") (LocalReference AST.double "arg_2")
-                        , UnName 6 := Select {
-                            condition' = ConstantOperand (C.Int 1 0),
-                            trueValue = LocalReference AST.double "arg_2",
-                            falseValue = LocalReference AST.double (UnName 5),
-                            metadata = []
-                          }
+                        -- FIXME: modify this test case, and remove select instruction
+                        , UnName 6 := fadd (LocalReference AST.double "arg_2") (LocalReference AST.double "arg_2")
+                        -- , UnName 6 := ConstantOperand (C.Int 1 0)
                         ]
                         (Do (Ret Nothing []))
                     , BasicBlock
@@ -600,7 +597,9 @@ example = mkModule $ execModuleBuilder emptyModuleBuilder $ mdo
     blk2 <- block; do
       a <- fadd arg c1 `named` "arg"
       b <- fadd a a
-      select (cons $ C.Int 1 0) a b
+      -- FIXME: modify this test case
+      c <- fadd a a
+      -- select (cons $ C.Int 1 0) a b
       retVoid
 
     blk3 <- block; do

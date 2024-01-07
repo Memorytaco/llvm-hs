@@ -225,7 +225,7 @@ MDString* LLVM_Hs_DIFileGetDirectory(DIFile *di) {
 
 MDString* LLVM_Hs_DIFileGetChecksum(DIFile *di) {
     auto checksumInfo = di->getRawChecksum();
-    if (checksumInfo.hasValue()) {
+    if (checksumInfo.has_value()) {
         return checksumInfo->Value;
     }
     return nullptr;
@@ -233,7 +233,7 @@ MDString* LLVM_Hs_DIFileGetChecksum(DIFile *di) {
 
 llvm::DIFile::ChecksumKind LLVM_Hs_DIFileGetChecksumKind(DIFile *di) {
     auto checksumInfo = di->getRawChecksum();
-    if (checksumInfo.hasValue()) {
+    if (checksumInfo.has_value()) {
         return checksumInfo->Kind;
     }
     return static_cast<llvm::DIFile::ChecksumKind>(0);
@@ -299,7 +299,7 @@ unsigned LLVM_Hs_DIBasicType_GetEncoding(DIBasicType *ds) {
 // DIDerivedType
 DIDerivedType* LLVM_Hs_Get_DIDerivedType(LLVMContextRef ctx, uint16_t tag, MDString* name, DIFile *file, unsigned line, DIScope *scope, DIType *baseType, uint64_t sizeInBits, uint32_t alignInBits, uint64_t offsetInBits, uint32_t dwarfAddressSpace, LLVMBool dwarfAddressSpacePresent, DINode::DIFlags flags) {
     LLVMContext& c = *unwrap(ctx);
-    Optional<unsigned> addrSpace;
+    std::optional<unsigned> addrSpace;
     if (dwarfAddressSpacePresent) {
         addrSpace = dwarfAddressSpace;
     }
@@ -470,8 +470,8 @@ DILexicalBlock* LLVM_Hs_Get_DILexicalBlock(LLVMContextRef ctx, DILocalScope* sco
 
 LLVMBool LLVM_Hs_DIDerivedTypeGetAddressSpace(DIDerivedType *a, unsigned *x) {
     auto addressSpace = a->getDWARFAddressSpace();
-    if (addressSpace.hasValue()) {
-        *x = addressSpace.getValue();
+    if (addressSpace.has_value()) {
+        *x = *addressSpace;
         return 1;
     } else {
         return 0;

@@ -54,14 +54,14 @@ functionType rt (n, ats) va = functionType' rt ats n va
 
 newtype AddrSpace = AddrSpace CUInt
 -- | <http://llvm.org/doxygen/group__LLVMCCoreTypeSequential.html#ga299fe6147083678d0494b1b875f542fae>
-foreign import ccall unsafe "LLVMPointerType" pointerType ::
+--
+-- this interface add additional checking when constructing pointer type
+foreign import ccall unsafe "LLVMPointerType" typedPointerType ::
   Ptr Type -> AddrSpace -> IO (Ptr Type)
 
-foreign import ccall unsafe "LLVM_Hs_OpaquePointerType" opaquePointerType ::
+-- | pointer type is default to opaque type.
+foreign import ccall unsafe "LLVMPointerType" pointerType ::
   Ptr Context -> AddrSpace -> IO (Ptr Type)
-
-foreign import ccall unsafe "LLVM_Hs_IsOpaquePointerType" isOpaquePointerType ::
-  Ptr Type -> IO LLVMBool
 
 -- | <http://llvm.org/doxygen/group__LLVMCCoreTypeSequential.html#ga124b162b69b5def41dde2fda3668cbd9>
 foreign import ccall unsafe "LLVMGetPointerAddressSpace" getPointerAddressSpace ::

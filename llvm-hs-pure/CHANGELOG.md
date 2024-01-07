@@ -1,3 +1,12 @@
+## 17.0.6 (2024-01-07)
+
+* Update to LLVM 17.0.6
+* Pointer now defaults to opaque pointer and `pointerType` now defaults to opaque pointer type with origin FFI `pointerType` to `typedPointerType`.
+* DebugCompressionType now has Zlib and Zstd two new types. "CompressionZ" is removed.
+* "select" instruction is removed from llvm-c api, and we remove it from codebase. Please see [llvm 17.0.1 release note](https://releases.llvm.org/17.0.1/docs/ReleaseNotes.html#changes-to-the-c-api) for more info.
+* Sync TargetOptions with llvm site, and please refer to git diff for details.
+* Sync CallingConvention with llvm site, and please refer to git diff for details.
+
 ## 12.0.0 (2021-03-19)
 
 * Update to LLVM 12.0

@@ -360,13 +360,11 @@ ret val = emitTerm (Ret (Just val) [])
 switch :: MonadIRBuilder m => Operand -> Name -> [(C.Constant, Name)] -> m ()
 switch val def dests = emitTerm $ Switch val def dests []
 
+{-# DEPRECATED select "Select instruction has been removed" #-}
+-- | Update: it is removed, see <https://discourse.llvm.org/t/rfc-remove-most-constant-expressions/63179/28 discussion>
 -- | See <https://llvm.org/docs/LangRef.html#select-instruction reference>.
 select :: (HasCallStack, MonadIRBuilder m, MonadModuleBuilder m) => Operand -> Operand -> Operand -> m Operand
-select cond t f = do
-  tt <- typeOf t
-  case tt of
-    (Left s) -> error s
-    (Right tt') -> emitInstr tt' $ Select cond t f []
+select cond t f = error "select instruction is removed"
 
 -- | Conditional branch (see 'br' for unconditional instructions).
 -- See <https://llvm.org/docs/LangRef.html#br-instruction reference>.

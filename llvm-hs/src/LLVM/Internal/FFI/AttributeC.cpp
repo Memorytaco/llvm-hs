@@ -149,9 +149,9 @@ void LLVM_Hs_AttrBuilderAddUWTable(AttrBuilder &ab) {
 void LLVM_Hs_AttrBuilderAddAllocSize(AttrBuilder &ab, unsigned x, unsigned y,
                                      LLVMBool optionalIsThere) {
     if (optionalIsThere) {
-        ab.addAllocSizeAttr(x, Optional<unsigned>(y));
+        ab.addAllocSizeAttr(x, std::optional<unsigned>(y));
     } else {
-        ab.addAllocSizeAttr(x, Optional<unsigned>());
+        ab.addAllocSizeAttr(x, std::optional<unsigned>());
     }
 }
 
@@ -168,8 +168,8 @@ LLVMBool LLVM_Hs_AttributeGetAllocSizeArgs(LLVMAttributeRef a, unsigned *x,
                                            unsigned *y) {
     auto pair = unwrap(a).getAllocSizeArgs();
     *x = pair.first;
-    if (pair.second.hasValue()) {
-        *y = pair.second.getValue();
+    if (pair.second.has_value()) {
+        *y = *pair.second;
         return 1;
     } else {
         return 0;

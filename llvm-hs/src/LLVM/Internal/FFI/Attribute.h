@@ -9,7 +9,6 @@
   macro(AllocAlign,T,F,F)                           \
   macro(AllocatedPointer,T,F,F)                     \
   macro(AlwaysInline,F,F,T)                         \
-  macro(ArgMemOnly,F,F,T)                           \
   macro(Builtin,F,F,T)                              \
   macro(Cold,F,F,T)                                 \
   macro(Convergent,F,F,T)                           \
@@ -18,8 +17,6 @@
   macro(Hot,F,F,T)                                  \
   macro(ImmArg,T,F,F)                               \
   macro(InReg,T,T,F)                                \
-  macro(InaccessibleMemOnly,F,F,T)                  \
-  macro(InaccessibleMemOrArgMemOnly,F,F,T)          \
   macro(InlineHint,F,F,T)                           \
   macro(JumpTable,F,F,T)                            \
   macro(MinSize,F,F,T)                              \
@@ -64,6 +61,7 @@
   macro(SanitizeMemory,F,F,T)                       \
   macro(SanitizeThread,F,F,T)                       \
   macro(ShadowCallStack,F,F,T)                      \
+  macro(SkipProfile,F,F,T)                          \
   macro(Speculatable,F,F,T)                         \
   macro(SpeculativeLoadHardening,F,F,T)             \
   macro(StackProtect,F,F,T)                         \
@@ -87,10 +85,14 @@
   macro(AllocSize,F,F,T)                            \
   macro(Dereferenceable,T,T,F)                      \
   macro(DereferenceableOrNull,T,T,F)                \
-  macro(StackAlignment,F,F,T)                       \
+  macro(Memory,F,F,T)                               \
+  macro(NoFPClass,T,T,F)                            \
+  macro(StackAlignment,T,F,T)                       \
   macro(UWTable,F,F,T)                              \
   macro(VScaleRange,F,F,T)                          \
-  macro(EndAttrKinds,F,F,F)
+  macro(EndAttrKinds,F,F,F)                         \
+  macro(EmptyKey,F,F,F)                             \
+  macro(TombstoneKey,F,F,F)
 
 typedef enum {
 #define ENUM_CASE(x,p,r,f) LLVM_Hs_AttributeKind_ ## x,

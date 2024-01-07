@@ -458,14 +458,14 @@ tests = testGroup "Instructions" [
              metadata = []
            },
            "addrspacecast ptr %2 to ptr addrspace(2)"),
-          ("select",
-           Select {
-             condition' = a 4,
-             trueValue = a 0,
-             falseValue = a 0,
-             metadata = []
-           },
-           "select i1 %4, i32 %0, i32 %0"),
+          -- ("select",
+          --  Select {
+          --    condition' = a 4,
+          --    trueValue = a 0,
+          --    falseValue = a 0,
+          --    metadata = []
+          --  },
+          --  "select i1 %4, i32 %0, i32 %0"),
           ("vaarg",
            VAArg {
              argList = a 2,

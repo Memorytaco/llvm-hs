@@ -398,12 +398,12 @@ data Instruction
       type' :: Type,
       metadata :: InstructionMetadata
     }
-  | Select {
-      condition' :: Operand,
-      trueValue :: Operand,
-      falseValue :: Operand,
-      metadata :: InstructionMetadata
-    }
+  -- | Select {
+  --     condition' :: Operand,
+  --     trueValue :: Operand,
+  --     falseValue :: Operand,
+  --     metadata :: InstructionMetadata
+  --   }
   | Call {
       tailCallKind :: Maybe TailCallKind,
       callingConvention :: CallingConvention,

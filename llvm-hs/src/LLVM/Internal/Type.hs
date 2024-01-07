@@ -42,9 +42,10 @@ getStructure t = scopeAnyCont $ do
 
 getStructDefinitions :: DecodeAST [A.Definition]
 getStructDefinitions = do
-  let getStructDefinition t = do
-       opaque <- decodeM =<< liftIO (FFI.structIsOpaque t)
-       if opaque then return Nothing else Just <$> getStructure t
+  -- there is no more pointer holding pointee type.
+  let getStructDefinition = const (return Nothing)
+      --  opaque <- decodeM =<< liftIO (FFI.structIsOpaque t)
+      --  if opaque then return Nothing else Just <$> getStructure t
   flip fix Set.empty $ \continue done -> do
     t <- takeTypeToDefine
     flip (maybe (return [])) t $ \t -> do
@@ -81,7 +82,7 @@ instance EncodeM EncodeAST A.Type (Ptr FFI.Type) where
         liftIO $ FFI.functionType returnType argTypes isVarArg
       A.PointerType addressSpace -> do
         a <- encodeM addressSpace
-        liftIO $ FFI.opaquePointerType context a
+        liftIO $ FFI.pointerType context a
       A.VoidType -> liftIO $ FFI.voidTypeInContext context
       A.FloatingPointType A.HalfFP      -> liftIO $ FFI.halfTypeInContext context
       A.FloatingPointType A.FloatFP     -> liftIO $ FFI.floatTypeInContext context

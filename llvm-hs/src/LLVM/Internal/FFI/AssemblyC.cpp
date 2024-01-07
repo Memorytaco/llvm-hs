@@ -14,9 +14,9 @@ using namespace llvm;
 
 extern "C" {
 
-LLVMModuleRef LLVM_Hs_ParseLLVMAssembly(LLVMContextRef context,
-                                             LLVMMemoryBufferRef memoryBuffer,
-                                             char **error) {
+LLVMModuleRef LLVM_Hs_ParseLLVMAssembly
+  (LLVMContextRef context, LLVMMemoryBufferRef memoryBuffer, char **error)
+{
   LLVMModuleRef M;
   LLVMParseIRInContext(context, memoryBuffer, &M, error);
   return M;

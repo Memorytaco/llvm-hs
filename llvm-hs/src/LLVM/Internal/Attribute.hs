@@ -100,13 +100,13 @@ instance Monad m => EncodeM m A.FA.FunctionAttribute (Ptr FFI.FunctionAttrBuilde
     A.FA.UWTable -> liftIO $ FFI.attrBuilderAddUWTable b
     _ -> liftIO $ FFI.attrBuilderAddFunctionAttributeKind b $ case a of
       A.FA.AlwaysInline -> FFI.functionAttributeKindAlwaysInline
-      A.FA.ArgMemOnly -> FFI.functionAttributeKindArgMemOnly
+      -- A.FA.ArgMemOnly -> FFI.functionAttributeKindArgMemOnly
       A.FA.Builtin -> FFI.functionAttributeKindBuiltin
       A.FA.Cold -> FFI.functionAttributeKindCold
       A.FA.Convergent -> FFI.functionAttributeKindConvergent
       A.FA.Hot -> FFI.functionAttributeKindHot
-      A.FA.InaccessibleMemOnly -> FFI.functionAttributeKindInaccessibleMemOnly
-      A.FA.InaccessibleMemOrArgMemOnly -> FFI.functionAttributeKindInaccessibleMemOrArgMemOnly
+      -- A.FA.InaccessibleMemOnly -> FFI.functionAttributeKindInaccessibleMemOnly
+      -- A.FA.InaccessibleMemOrArgMemOnly -> FFI.functionAttributeKindInaccessibleMemOrArgMemOnly
       A.FA.InlineHint -> FFI.functionAttributeKindInlineHint
       A.FA.JumpTable -> FFI.functionAttributeKindJumpTable
       A.FA.MinimizeSize -> FFI.functionAttributeKindMinSize
@@ -209,13 +209,12 @@ instance DecodeM DecodeAST A.FA.FunctionAttribute FFI.FunctionAttribute where
              x' <- decodeM =<< peek x
              return (A.FA.AllocSize x' y)
            [functionAttributeKindP|AlwaysInline|] -> return A.FA.AlwaysInline
-           [functionAttributeKindP|ArgMemOnly|] -> return A.FA.ArgMemOnly
            [functionAttributeKindP|Builtin|] -> return A.FA.Builtin
            [functionAttributeKindP|Cold|] -> return A.FA.Cold
            [functionAttributeKindP|Convergent|] -> return A.FA.Convergent
            [functionAttributeKindP|Hot|] -> return A.FA.Hot
-           [functionAttributeKindP|InaccessibleMemOnly|] -> return A.FA.InaccessibleMemOnly
-           [functionAttributeKindP|InaccessibleMemOrArgMemOnly|] -> return A.FA.InaccessibleMemOrArgMemOnly
+          --  [functionAttributeKindP|InaccessibleMemOnly|] -> return A.FA.InaccessibleMemOnly
+          --  [functionAttributeKindP|InaccessibleMemOrArgMemOnly|] -> return A.FA.InaccessibleMemOrArgMemOnly
            [functionAttributeKindP|InlineHint|] -> return A.FA.InlineHint
            [functionAttributeKindP|JumpTable|] -> return A.FA.JumpTable
            [functionAttributeKindP|MinSize|] -> return A.FA.MinimizeSize

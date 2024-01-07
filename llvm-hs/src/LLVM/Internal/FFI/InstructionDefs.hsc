@@ -1,4 +1,4 @@
--- This module translates the instruction data in "llvm/Instruction.def" into a Haskell data structure,
+-- This module translates the instruction data in "llvm/IR/Instruction.def" into a Haskell data structure,
 -- so it may be accessed conveniently with Template Haskell code
 module LLVM.Internal.FFI.InstructionDefs where
 

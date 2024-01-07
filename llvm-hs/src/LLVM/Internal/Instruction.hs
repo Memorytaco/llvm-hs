@@ -409,8 +409,11 @@ $(do
           in
           TH.caseE [| n |] $
             [ TH.match opcodeP (TH.normalB (TH.doE handlerBody)) []
-            | (lrn, iDef) <- Map.toList ID.instructionDefs,
-              ID.instructionKind iDef /= ID.Terminator,
+            | (lrn, iDef) <- Map.toList ID.instructionDefs
+            , case lrn of
+                "Select" -> False
+                _ -> True
+            , ID.instructionKind iDef /= ID.Terminator,
               let opcodeP = TH.dataToPatQ (const Nothing) (ID.cppOpcode iDef)
                   handlerBody =
                     let TH.RecC fullName fields = findInstrFields lrn
@@ -468,12 +471,12 @@ $(do
                  bs3' <- encodeM bs3
                  liftIO $ FFI.addIncoming i ivs3' bs3'
                )
-          A.Select { A.condition' = c, A.trueValue = t, A.falseValue = f } -> do
-            c' <- encodeM c
-            t' <- encodeM t
-            f' <- encodeM f
-            i <- liftIO $ FFI.buildSelect builder c' t' f' s
-            return' i
+          -- A.Select { A.condition' = c, A.trueValue = t, A.falseValue = f } -> do
+          --   c' <- encodeM c
+          --   t' <- encodeM t
+          --   f' <- encodeM f
+          --   i <- liftIO $ FFI.buildSelect builder c' t' f' s
+          --   return' i
           A.Freeze { A.operand0 = op0, A.type' = t } -> do
             op0' <- encodeM op0
             t' <- encodeM t
@@ -573,40 +576,39 @@ $(do
             i <- liftIO $ FFI.buildCatchPad builder catchSwitch' args' numArgs s
             return' i
           o -> $(TH.caseE [| o |] $
-                  [TH.match
-                   (TH.recP fullName [ (f,) <$> (TH.varP . TH.mkName . TH.nameBase $ f) | f <- encodeFieldNames ])
-                   (TH.normalB (TH.doE handlerBody))
-                   []
-                   |
-                   (name, ID.instructionKind -> k) <- Map.toList ID.instructionDefs,
-                   case (k, name) of
-                     (ID.Unary, _) -> True
-                     (ID.Binary, _) -> True
-                     (ID.Cast, _) -> True
-                     (ID.Memory, "Alloca") -> False
-                     (ID.Memory, _) -> True
-                     _ -> False,
-                   let
-                     TH.RecC fullName (unzip3 -> (fieldNames, _, _)) = findInstrFields name
-                     encodeFieldNames = filter (\f -> TH.nameBase f /= "metadata") fieldNames
-                     encodeMFields = map TH.nameBase encodeFieldNames
-                     handlerBody = ([
-                       TH.bindS (if s == "fastMathFlags" then TH.tupP [] else TH.varP (TH.mkName s))
-                           [| encodeM $(TH.dyn s) |] | s <- encodeMFields
-                      ] ++ [
-                       TH.bindS (TH.varP (TH.mkName "i")) [| liftIO $ $(
-                          foldl1 TH.appE . map TH.dyn $
-                           [ "FFI.build" ++ name, "builder" ] ++ (encodeMFields List.\\ [ "fastMathFlags" ]) ++ [ "s" ]
-                        ) |],
-                       TH.noBindS [| return' $(TH.dyn "i") |]
-                      ])
+                  [ TH.match
+                    (TH.recP fullName [ (f,) <$> (TH.varP . TH.mkName . TH.nameBase $ f) | f <- encodeFieldNames ])
+                    (TH.normalB (TH.doE handlerBody))
+                    []
+                  | (name, ID.instructionKind -> k) <- Map.toList ID.instructionDefs
+                  , case (k, name) of
+                      (ID.Unary, _) -> True
+                      (ID.Binary, _) -> True
+                      (ID.Cast, _) -> True
+                      (ID.Memory, "Alloca") -> False
+                      (ID.Memory, _) -> True
+                      (_, "Select") -> False
+                      _ -> False
+                  , let TH.RecC fullName (unzip3 -> (fieldNames, _, _)) = findInstrFields name
+                        encodeFieldNames = filter (\f -> TH.nameBase f /= "metadata") fieldNames
+                        encodeMFields = map TH.nameBase encodeFieldNames
+                        handlerBody = ([
+                          TH.bindS (if s == "fastMathFlags" then TH.tupP [] else TH.varP (TH.mkName s))
+                              [| encodeM $(TH.dyn s) |] | s <- encodeMFields
+                          ] ++ [
+                          TH.bindS (TH.varP (TH.mkName "i")) [| liftIO $ $(
+                              foldl1 TH.appE . map TH.dyn $
+                              [ "FFI.build" ++ name, "builder" ] ++ (encodeMFields List.\\ [ "fastMathFlags" ]) ++ [ "s" ]
+                            ) |],
+                          TH.noBindS [| return' $(TH.dyn "i") |]
+                          ])
                   ] ++
                   (map (\p -> TH.match p (TH.normalB [|inconsistentCases "Instruction" o|]) [])
                        [[p|A.Alloca{}|],
                         [p|A.ICmp{}|],
                         [p|A.FCmp{}|],
                         [p|A.Phi{}|],
-                        [p|A.Select{}|],
+                        -- [p|A.Select{}|],
                         [p|A.Freeze{}|],
                         [p|A.Call{}|],
                         [p|A.VAArg{}|],

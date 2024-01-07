@@ -371,19 +371,21 @@ LLVMValueRef LLVM_Hs_BuildAtomicRMW(
 	return wrap(a);
 }
 
+// use deduction guide instead, see https://reviews.llvm.org/D140896
 LLVMValueRef LLVM_Hs_BuildCleanupPad(LLVMBuilderRef b, LLVMValueRef parentPad,
                                      LLVMValueRef *args, unsigned numArgs,
                                      const char *name) {
   return wrap(unwrap(b)->CreateCleanupPad(unwrap(parentPad),
-                                          makeArrayRef(unwrap(args), numArgs),
+                                          ArrayRef {unwrap(args), numArgs},
                                           name));
 }
 
+// use deduction guide instead, see https://reviews.llvm.org/D140896
 LLVMValueRef LLVM_Hs_BuildCatchPad(LLVMBuilderRef b, LLVMValueRef catchSwitch,
                                    LLVMValueRef *args, unsigned numArgs,
                                    const char *name) {
     return wrap(unwrap(b)->CreateCatchPad(unwrap(catchSwitch),
-                                          makeArrayRef(unwrap(args), numArgs),
+                                          ArrayRef {unwrap(args), numArgs},
                                           name));
 }
 

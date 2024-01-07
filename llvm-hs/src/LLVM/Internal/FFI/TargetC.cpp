@@ -6,7 +6,8 @@
 #include "llvm-c/Core.h"
 #include "llvm-c/Target.h"
 #include "llvm-c/TargetMachine.h"
-#include "llvm/ADT/Triple.h"
+#include "llvm/TargetParser/Triple.h"
+#include "llvm/TargetParser/Host.h"
 #include "llvm/Analysis/TargetLibraryInfo.h"
 #include "llvm/ExecutionEngine/Interpreter.h"
 #include "llvm/IR/DataLayout.h"
@@ -14,7 +15,6 @@
 #include "llvm/IR/Module.h"
 #include "llvm/MC/TargetRegistry.h"
 #include "llvm/Support/FormattedStream.h"
-#include "llvm/Support/Host.h"
 #include "llvm/Support/TargetSelect.h"
 #include "llvm/Target/CodeGenCWrappers.h"
 #include "llvm/Target/TargetMachine.h"
@@ -509,7 +509,7 @@ LLVMTargetMachineRef LLVM_Hs_CreateTargetMachine(
     LLVMTargetRef T, const char *Triple, const char *CPU, const char *Features,
     TargetOptions *TO, LLVMRelocMode Reloc, LLVMCodeModel CodeModel,
     LLVMCodeGenOptLevel Level) {
-    Optional<Reloc::Model> RM;
+    std::optional<Reloc::Model> RM;
     switch (Reloc) {
     case LLVMRelocStatic:
         RM = Reloc::Static;
@@ -525,7 +525,7 @@ LLVMTargetMachineRef LLVM_Hs_CreateTargetMachine(
     }
 
     bool JIT;
-    Optional<CodeModel::Model> CM = unwrap(CodeModel, JIT);
+    std::optional<CodeModel::Model> CM = unwrap(CodeModel, JIT);
 
     CodeGenOpt::Level OL;
     switch (Level) {
